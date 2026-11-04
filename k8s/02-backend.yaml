@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: backend, namespace: expense }
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: backend } }
+  template:
+    metadata: { labels: { app: backend } }
+    spec:
+      topologySpreadConstraints:          # rải đều Pod lên các worker
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector: { matchLabels: { app: backend } }
+      tolerations:                         # evict Pod sau 30s khi node chết (mặc định 300s)
+        - { key: node.kubernetes.io/unreachable, operator: Exists, effect: NoExecute, tolerationSeconds: 30 }
+        - { key: node.kubernetes.io/not-ready,   operator: Exists, effect: NoExecute, tolerationSeconds: 30 }
+      containers:
+        - name: backend
+          image: DOCKERHUB_USER/expense-backend:v1
+          ports: [{ containerPort: 8080 }]
+          env:
+            - { name: DB_HOST, value: postgres }
+            - { name: DB_USER, valueFrom: { secretKeyRef: { name: db-secret, key: POSTGRES_USER } } }
+            - { name: DB_PASSWORD, valueFrom: { secretKeyRef: { name: db-secret, key: POSTGRES_PASSWORD } } }
+            - { name: DB_NAME, valueFrom: { secretKeyRef: { name: db-secret, key: POSTGRES_DB } } }
+            - { name: JWT_SECRET, value: expense-jwt-change-me }
+          readinessProbe: { httpGet: { path: /api/ready, port: 8080 }, periodSeconds: 5 }
+          livenessProbe:  { httpGet: { path: /api/health, port: 8080 }, initialDelaySeconds: 20, periodSeconds: 10 }
+          resources:
+            requests: { cpu: 50m, memory: 64Mi }
+            limits: { cpu: 300m, memory: 256Mi }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: backend, namespace: expense }
+spec:
+  selector: { app: backend }
+  ports: [{ port: 8080, targetPort: 8080 }]
