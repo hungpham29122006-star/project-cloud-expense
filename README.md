@@ -20,13 +20,13 @@ project-cloud-expense/
 
 ├── k8s/                    # Các file YAML khai báo tài nguyên Kubernetes
 
-│   ├── 00-namespace.yaml   # Khởi tạo Namespace 'expense'
+│     ├── 00-namespace.yaml   # Khởi tạo Namespace 'expense'
 
-│   ├── 01-postgres.yaml    # Secret, PV, PVC, Deployment & ClusterIP Service cho PostgreSQL
+│     ├── 01-postgres.yaml    # Secret, PV, PVC, Deployment & ClusterIP Service cho PostgreSQL
 
-│   ├── 02-backend.yaml     # Deployment (2 replicas) & ClusterIP Service (8080) cho Backend
+│     ├── 02-backend.yaml     # Deployment (2 replicas) & ClusterIP Service (8080) cho Backend
 
-│   └── 03-frontend.yaml    # Deployment (2 replicas) & NodePort Service (30080) cho Frontend
+│     └── 03-frontend.yaml    # Deployment (2 replicas) & NodePort Service (30080) cho Frontend
 
 ├── docs/                   # Đề cương Báo cáo và Slide thuyết trình
 
