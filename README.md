@@ -13,14 +13,23 @@ Dự án đóng gói ứng dụng Web Quản lý Chi tiêu (Frontend React/Vite 
 ## 1. Cấu trúc thư mục dự án
 
 project-cloud-expense/
+
 ├── backend/                # Mã nguồn Backend (Node.js/Express) & Dockerfile
+
 ├── frontend/               # Mã nguồn Frontend (React/Vite + Nginx) & Dockerfile
+
 ├── k8s/                    # Các file YAML khai báo tài nguyên Kubernetes
+
 │   ├── 00-namespace.yaml   # Khởi tạo Namespace 'expense'
+
 │   ├── 01-postgres.yaml    # Secret, PV, PVC, Deployment & ClusterIP Service cho PostgreSQL
+
 │   ├── 02-backend.yaml     # Deployment (2 replicas) & ClusterIP Service (8080) cho Backend
+
 │   └── 03-frontend.yaml    # Deployment (2 replicas) & NodePort Service (30080) cho Frontend
+
 ├── docs/                   # Đề cương Báo cáo và Slide thuyết trình
+
 └── docker-compose.yml      # Cấu hình chạy thử nghiệm cục bộ với Docker Compose
 
 ---
