@@ -113,7 +113,9 @@ Bước 4: Truy cập ứng dụng từ trình duyệt qua Service NodePort (300
   multipass stop worker2
 
   # Quan sát trạng thái Node và sự dịch chuyển của các Pod
+  
   kubectl get nodes
+  
   kubectl get pods -n expense -o wide
 
   # Giải thích hiện tượng:
