@@ -37,13 +37,19 @@ project-cloud-expense/
 ## 2. Đóng gói ứng dụng bằng Docker & Đẩy lên Docker Hub (Yêu cầu 1)
 
 2.1. Build và push Backend image (gắn tag phiên bản cụ thể, không dùng latest):
+
   cd backend
+  
   docker build -t hoanggiahuy/expense-backend:v1 .
+  
   docker push hoanggiahuy/expense-backend:v1
 
 2.2. Build và push Frontend image (gắn tag phiên bản cụ thể, không dùng latest):
+
   cd ../frontend
+  
   docker build -t hoanggiahuy/expense-frontend:v1 .
+  
   docker push hoanggiahuy/expense-frontend:v1
 
 ---
@@ -82,17 +88,24 @@ Bước 4: Truy cập ứng dụng từ trình duyệt qua Service NodePort (300
 ## 5. Vận hành trên Kubernetes (Yêu cầu 4)
 
 5.1. Scale một Deployment lên 4 Replicas:
+
   kubectl scale deployment frontend --replicas=4 -n expense
+  
   kubectl get pods -n expense -o wide
 
 5.2. Cập nhật ứng dụng lên phiên bản mới (v2) và Rollback về phiên bản cũ (v1):
   # Cập nhật image frontend từ v1 lên v2
+  
   kubectl set image deployment/frontend frontend=hoanggiahuy/expense-frontend:v2 -n expense
+  
   kubectl rollout status deployment/frontend -n expense
 
   # Rollback về phiên bản v1 trước đó
+  
   kubectl rollout undo deployment/frontend -n expense
+  
   kubectl rollout status deployment/frontend -n expense
+  
   kubectl rollout history deployment/frontend -n expense
 
 5.3. Thử nghiệm tắt một Worker Node, quan sát và giải thích:
